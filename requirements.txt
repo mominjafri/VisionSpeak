@@ -45,7 +45,7 @@ opencv-python-headless==4.9.0.80
 packaging==24.0
 parso==0.8.4
 pexpect==4.9.0
-pillow==10.3.0
+pillow==10.0.1
 prompt-toolkit==3.0.43
 protobuf==4.25.3
 ptyprocess==0.7.0
