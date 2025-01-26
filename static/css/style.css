@@ -1,0 +1,176 @@
+html, body {
+    background-color: #007bff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    background-color: #007bff; /* Blue background for outside the rectangle */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.wrapper {
+    background-color: #fff; /* White background for the rectangle */
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 600px;
+    text-align: center;
+    color: #333; /* Adjust text color for better readability */
+}
+
+.logo {
+    width: 120px; /* Adjust the width as needed */
+    height: auto;
+}
+
+.header-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+header h1 {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+header h2 {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+form {
+    margin-bottom: 20px;
+}
+
+textarea {
+    width: 100%;
+    margin-top: 20px;
+}
+
+footer {
+    margin-top: 20px;
+}
+
+.dropdown-toggle, .btn-primary, .btn-info, .btn-success, .btn-secondary {
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+}
+
+.confirm-btn, .btn-primary {
+    background-color: #007bff;
+    font-size: 18px;
+    font-family: Arial, sans-serif;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 3px;
+    color: #007bff; /* Change text color to match background */
+    background: none; /* Remove background */
+    cursor: pointer;
+}
+
+.confirm-btn-2{
+    background-color: #0d5093;
+    font-size: 16px;
+    font-family: Arial, sans-serif;
+    padding: 5px 5px;
+    border: none;
+    border-radius: 3px;
+    color: #0d5093; /* Change text color to match background */
+    background: none; /* Remove background */
+    cursor: pointer;
+}
+
+.btn-info {
+    background-color: #17a2b8;
+}
+
+.btn-success {
+    background-color: #28a745;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+}
+
+.dropup .dropdown-menu {
+    top: auto;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.language-selection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.language-selection label {
+    font-size: 20px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin-right: 10px;
+}
+
+.language-selection select {
+    font-size: 15px;
+    font-family: Arial, sans-serif;
+    padding: 5px 10px;
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #007bff;
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.voice-selection {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.voice-selection label {
+    font-size: 20px;
+    color: #333;
+    font-family: Arial, sans-serif;
+    margin-right: 10px;
+}
+
+.voice-selection select {
+    font-size: 16px; /* Smaller font size */
+    font-family: Arial, sans-serif;
+    padding: 5px 8px; /* Smaller padding */
+    border: 2px solid #333;
+    border-radius: 5px;
+    background-color: #0d5093; /* Darker blue background */
+    color: #fff;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+.voice-confirm {
+    font-size: 16px; /* Smaller font size */
+    padding: 5px 10px; /* Smaller padding */
+    background-color: #0667c8; /* Darker blue background */
+    color: #fff;
+}
+
+

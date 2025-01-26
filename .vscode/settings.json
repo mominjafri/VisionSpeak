@@ -1,0 +1,4 @@
+{
+    "appService.defaultWebAppToDeploy": "/subscriptions/5d2113bf-ddde-4376-867d-0a36b9696e34/resourceGroups/VisionSpeak/providers/Microsoft.Web/sites/VisionSpeak",
+    "appService.deploySubpath": "."
+}

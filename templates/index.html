@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VisionSpeak</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div class="wrapper">
+            <header class="text-center">
+                <img src="/static/images/updated_logo.png" alt="VisionSpeak Logo" class="img-fluid logo">
+                <div class="header-title">VisionSpeak</div>
+            </header>
+            <main>
+                <form id="imageForm" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label for="image">Select Image:</label>
+                        <input type="file" id="image" name="image" accept="image/*,.pdf" class="form-control-file">
+                    </div>
+                    <button type="button" class="btn btn-primary" id="extractTextBtn">Extract Text</button>
+                </form>
+                <hr>
+                <div id="textAreaContainer" class="text-center">
+                    <div class="language-selection">
+                        <label for="language">Language:</label>
+                        <select id="language" name="language">
+                            <!-- JavaScript will populate options here -->
+                        </select>
+                        <button class="confirm-btn" onclick="changeLanguage()">Confirm</button>
+                    </div>
+                    <div class="voice-selection">
+                        <label for="voice">Voice:</label>
+                        <select id="voice" name="voice" class="voice-dropdown">
+                            <!-- JavaScript will populate options here -->
+                        </select>
+                    </div>
+
+                    <textarea id="textArea" class="form-control" rows="5"></textarea>
+                    <div class="d-flex justify-content-center mt-3">
+                        <button type="button" class="btn btn-info mx-2" id="translateBtn"><i class="fas fa-language"></i> Translate Text</button>
+                        <button type="button" class="btn btn-success mx-2" id="speakBtn"><i class="fas fa-volume-up"></i> Speak Text</button>
+                    </div>
+                    <div class="dropup d-flex justify-content-center mt-3"></div>
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="downloadDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Download
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="downloadDropdown">
+                            <a class="dropdown-item" href="#" id="downloadPdf">.pdf</a>
+                            <a class="dropdown-item" href="#" id="downloadDocx">.docx</a>
+                    </div>
+                </div>
+            </main>
+            <footer>
+                <p>&copy; 2024 VisionSpeak</p>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.0.4/popper.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        // Populate language options on page load
+        document.addEventListener("DOMContentLoaded", function() {
+            var languageCodes = {{ language_codes|tojson|safe }};
+            var selectElement = document.getElementById('language');
+    
+            for (var language in languageCodes) {
+                var optionElement = document.createElement('option');
+                optionElement.value = languageCodes[language];
+                optionElement.textContent = language;
+                selectElement.appendChild(optionElement);
+            }
+
+            // Populate voice options
+            var voiceNames = {{ voice_names|tojson|safe }};
+            var voiceSelectElement = document.getElementById('voice');
+
+            voiceNames.forEach(function(voice) {
+                var optionElement = document.createElement('option');
+                optionElement.value = voice;
+                optionElement.textContent = voice;
+                voiceSelectElement.appendChild(optionElement);
+            });
+        });
+    
+        // Function to handle click event on the extract text button
+        $('#extractTextBtn').click(function () {
+            var formData = new FormData($('#imageForm')[0]);
+            $.ajax({
+                type: 'POST',
+                url: '/extract_text',
+                data: formData,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    $('#textArea').val(response.text);
+                    $('#textAreaContainer').show();
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    
+        // Function to handle click event on the translate button
+        $('#translateBtn').click(function () {
+            var textToTranslate = $('#textArea').val(); // Retrieve the text to be translated
+    
+            // Send the text to be translated via AJAX to the Flask endpoint
+            $.ajax({
+                type: 'POST',
+                url: '/translate_text',
+                data: { 'text': textToTranslate },
+                success: function (response) {
+                    $('#textArea').val(response.translated_text);
+                },
+                error: function (error) {
+                    console.log(error);
+                }
+            });
+        });
+    
+        var audioPlaying = false; // Track whether audio is playing
+
+        $('#speakBtn').click(function () {
+            if (!audioPlaying) { // Only play if no audio is currently playing
+                audioPlaying = true; // Set audioPlaying to true
+
+                var textToSpeak = $('#textArea').val(); // Retrieve the text to speak
+                var selectedVoice = $('#voice').val(); // Retrieve the selected voice
+
+                $.ajax({
+                    type: 'POST',
+                    url: '/speak_text',
+                    data: { 'text': textToSpeak, 'voice': selectedVoice },
+                    xhrFields: {
+                        responseType: 'blob'
+                    },
+                    success: function (blob) {
+                        var url = window.URL.createObjectURL(blob);
+                        var audio = new Audio(url);
+                        audio.play();
+
+                        audio.onended = function() { // Reset audioPlaying when audio ends
+                            audioPlaying = false;
+                        };
+                    },
+                    error: function (error) {
+                        console.log('Error:', error);
+                        audioPlaying = false; // Reset audioPlaying in case of error
+                    }
+                });
+            }
+        });
+
+        // Function to handle click event on the download dropdown items
+        $('#downloadPdf').click(function () {
+            var textToDownload = $('#textArea').val(); // Retrieve the text to download
+            var form = $('<form>', {
+                action: '/generate_pdf',
+                method: 'POST',
+                target: '_blank'
+            }).append($('<input>', {
+                type: 'hidden',
+                name: 'text',
+                value: textToDownload
+            }));
+            $('body').append(form);
+            form.submit();
+        });
+
+        $('#downloadDocx').click(function () {
+            var textToDownload = $('#textArea').val(); // Retrieve the text to download
+            var form = $('<form>', {
+                action: '/generate_docx',
+                method: 'POST',
+                target: '_blank'
+            }).append($('<input>', {
+                type: 'hidden',
+                name: 'text',
+                value: textToDownload
+            }));
+            $('body').append(form);
+            form.submit();
+        });
+    
+        // Function to change language
+        function changeLanguage() {
+            var selectedLanguage = document.getElementById('language').value;
+            $.ajax({
+                type: 'POST',
+                url: '/change_language',
+                data: { 'language': selectedLanguage },
+                success: function(response) {
+                // Update the selected language text on the page
+                document.getElementById('selectedlanguage').textContent = 'You have selected the language: ' + selectedLanguage;
+                },
+                error: function(error) {
+                    console.log('Error:', error);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
