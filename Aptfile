@@ -1,4 +1,22 @@
-libjpeg-dev
+# Compression libraries
 zlib1g-dev
+
+# Image processing libraries
+libjpeg-dev
 libtiff5-dev
 libfreetype6-dev
+
+# General dependencies for scientific computing and Python packages
+build-essential
+libpq-dev
+
+# Optional: If using numpy, pandas, or matplotlib with complex plots
+gfortran
+libatlas-base-dev
+
+# Optional: For OpenCV or other computer vision tasks
+libopencv-dev
+
+# Optional: For SQLite support (usually built into Python)
+sqlite3
+libsqlite3-dev
