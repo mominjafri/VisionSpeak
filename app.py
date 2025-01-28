@@ -12,7 +12,7 @@ from docx import Document
 app = Flask(__name__)
 app.secret_key = 'your_secret_key'
 
-voice_names = ["Momin", "Danny", "Laurie", "Hassan"]
+voice_names = ["Momin", "Danny"]
 
 @app.route('/')
 def load():
